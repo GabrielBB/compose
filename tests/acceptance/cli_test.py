@@ -2901,3 +2901,35 @@ services:
         assert re.search(r'foo1.+test[ \t]+dev', result.stdout) is not None
         assert re.search(r'foo2.+test[ \t]+prod', result.stdout) is not None
         assert re.search(r'foo3.+test[ \t]+latest', result.stdout) is not None
+
+    def test_up_not_always_pull(self):
+        self.dispatch(['up', '-d'], None)
+        service = self.project.get_service('simple')
+        another = self.project.get_service('another')
+
+        assert len(service.containers()) == 1
+        assert len(another.containers()) == 1
+
+        result = self.dispatch(['up', '-d'], None)
+        assert len(service.containers()) == 1
+        assert len(another.containers()) == 1
+
+        assert 'Pulling simple' not in result.stderr
+        assert 'Pulling another' not in result.stderr
+        assert 'failed' not in result.stderr
+
+    def test_up_always_pull(self):
+        self.dispatch(['up', '-d'], None)
+        service = self.project.get_service('simple')
+        another = self.project.get_service('another')
+
+        assert len(service.containers()) == 1
+        assert len(another.containers()) == 1
+
+        result = self.dispatch(['up', '-d', '--always-pull'], None)
+        assert len(service.containers()) == 1
+        assert len(another.containers()) == 1
+
+        assert 'Pulling simple' in result.stderr
+        assert 'Pulling another' in result.stderr
+        assert 'failed' not in result.stderr
