@@ -524,6 +524,7 @@ class Project(object):
            rescale=True,
            start=True,
            always_recreate_deps=False,
+           always_pull=False,
            reset_container_image=False,
            renew_anonymous_volumes=False,
            silent=False,
@@ -545,7 +546,7 @@ class Project(object):
             include_deps=start_deps)
 
         for svc in services:
-            svc.ensure_image_exists(do_build=do_build, silent=silent, cli=cli)
+            svc.ensure_image_exists(do_build=do_build, always_pull=always_pull, silent=silent, cli=cli)
         plans = self._get_convergence_plans(
             services, strategy, always_recreate_deps=always_recreate_deps)
 
