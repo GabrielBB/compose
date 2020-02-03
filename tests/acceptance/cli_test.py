@@ -2902,7 +2902,7 @@ services:
         assert re.search(r'foo2.+test[ \t]+prod', result.stdout) is not None
         assert re.search(r'foo3.+test[ \t]+latest', result.stdout) is not None
 
-    def test_up_not_always_pull(self):
+    def test_up_not_pull(self):
         self.dispatch(['up', '-d'], None)
         service = self.project.get_service('simple')
         another = self.project.get_service('another')
@@ -2918,7 +2918,7 @@ services:
         assert 'Pulling another' not in result.stderr
         assert 'failed' not in result.stderr
 
-    def test_up_always_pull(self):
+    def test_up_pull(self):
         self.dispatch(['up', '-d'], None)
         service = self.project.get_service('simple')
         another = self.project.get_service('another')
@@ -2926,7 +2926,7 @@ services:
         assert len(service.containers()) == 1
         assert len(another.containers()) == 1
 
-        result = self.dispatch(['up', '-d', '--always-pull'], None)
+        result = self.dispatch(['up', '-d', '--pull'], None)
         assert len(service.containers()) == 1
         assert len(another.containers()) == 1
 

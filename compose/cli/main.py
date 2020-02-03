@@ -1005,7 +1005,7 @@ class TopLevelCommand(object):
                                        and image haven't changed.
             --always-recreate-deps     Recreate dependent containers.
                                        Incompatible with --no-recreate.
-            --always-pull              Always attempt to pull a newer version of the image.
+            --pull                     Always attempt to pull a newer version of the image.
             --no-recreate              If containers already exist, don't recreate
                                        them. Incompatible with --force-recreate and -V.
             --no-build                 Don't build an image, even if it's missing.
@@ -1028,7 +1028,7 @@ class TopLevelCommand(object):
         """
         start_deps = not options['--no-deps']
         always_recreate_deps = options['--always-recreate-deps']
-        always_pull = options['--always-pull']
+        pull = options['--pull']
         exit_value_from = exitval_from_opts(options, self.project)
         cascade_stop = options['--abort-on-container-exit']
         service_names = options['SERVICE']
@@ -1069,7 +1069,7 @@ class TopLevelCommand(object):
                     scale_override=parse_scale_args(options['--scale']),
                     start=not no_start,
                     always_recreate_deps=always_recreate_deps,
-                    always_pull=always_pull,
+                    always_pull=pull,
                     reset_container_image=rebuild,
                     renew_anonymous_volumes=options.get('--renew-anon-volumes'),
                     silent=options.get('--quiet-pull'),
